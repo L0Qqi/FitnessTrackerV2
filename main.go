@@ -34,7 +34,12 @@ func (t Training) distance() float64 {
 // meanSpeed возвращает среднюю скорость бега или ходьбы.
 func (t Training) meanSpeed() float64 {
 	// вставьте ваш код ниже | преодолённая_дистанция_за_тренировку_в_км / время_тренировки_в_часах
-	return t.distance() / float64(t.Duration.Hours())
+	if t.Duration.Hours() != 0 {
+		return t.distance() / float64(t.Duration.Hours())
+	} else {
+		return 0
+	}
+
 }
 
 // Calories возвращает количество потраченных килокалорий на тренировке.
@@ -161,7 +166,11 @@ type Swimming struct {
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) meanSpeed() float64 {
 	// вставьте ваш код ниже
-	return float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Training.Duration.Hours()
+	if s.Training.Duration.Hours() != 0 {
+		return float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Training.Duration.Hours()
+	} else {
+		return 0
+	}
 }
 
 // Calories возвращает количество калорий, потраченных при плавании.
@@ -177,7 +186,13 @@ func (s Swimming) Calories() float64 {
 // Это переопределенный метод TrainingInfo() из Training.
 func (s Swimming) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
-	return s.Training.TrainingInfo()
+	return InfoMessage{
+		TrainingType: s.TrainingType,
+		Duration:     s.Duration,
+		Distance:     float64(s.LengthPool*s.CountPool) / MInKm,
+		Speed:        s.meanSpeed(),
+		Calories:     s.Calories(),
+	}
 }
 
 // ReadData возвращает информацию о проведенной тренировке.
